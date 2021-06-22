@@ -1,0 +1,44 @@
+#Ignore patch files
+*.patch
+
+#Ignore Visual Studio project files
+*.ncb
+i*.sln
+*.suo
+*.vcproj*
+_ReSharper.*/
+*resharper*
+.vs
+
+#Ignore Visual Studio output dirs
+Debug
+Release      
+
+#Ignore TextMate project files
+*.tmproj
+
+#Ignore VIM temporary files
+*.swp
+
+#Ignore GCC build artefacts
+*.o
+*-tests.exe
+*.dSYM
+
+#Ignore tags
+tags
+
+#Eclipse exclusions
+.cproject
+.project
+.settings/
+
+#cmake artifacts
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+bin/
+
+#mac crap
+.DS_Store
