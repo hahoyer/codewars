@@ -1,11 +1,11 @@
+﻿#pragma once
 #pragma warning( disable : 4267 ) // 'var' : conversion from 'size_t' to 'type', possible loss of data
-#include "igloo/igloo_alt.h"
+#include <igloo/igloo_alt.h>
 #pragma warning( default : 4267 ) // 'var' : conversion from 'size_t' to 'type', possible loss of data
 
-#include "Fuzzbox.h"
-#include "Guitar.h"
-
 using namespace igloo;
+
+#include "Guitar.h"
 
 Describe(a_guitar_with_a_fuzzbox)
 {
@@ -41,8 +41,3 @@ Describe(a_guitar_with_a_fuzzbox)
     Fuzzbox fuzzbox;
     Guitar guitar;
 };
-
-int main(int argc, const char* argv[])
-{
-    return TestRunner::RunAllTests(argc, argv);
-}
