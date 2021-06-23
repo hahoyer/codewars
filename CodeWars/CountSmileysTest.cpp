@@ -1,4 +1,5 @@
 ﻿#pragma warning( disable : 4267 ) // 'var' : conversion from 'size_t' to 'type', possible loss of data
+#include <regex>
 #include <igloo/igloo_alt.h>
 #pragma warning( default : 4267 ) // 'var' : conversion from 'size_t' to 'type', possible loss of data
 
@@ -6,29 +7,14 @@ using namespace igloo;
 
 using namespace std;
 
+const regex SmileyStyle("[:;][-~]?[)D]");
+
 bool IsSmiley(const string& value)
 {
-    auto hasEyes = false;
-    auto hasMouth = false;
-    for(auto character : value)
-        switch(character)
-        {
-        case ':':
-        case ';': hasEyes = true;
-            break;
-        case ')':
-        case 'D': hasMouth = true;
-            break;
-        case '-':
-        case'~': break;
-        default:
-            return false;
-        }
-
-    return hasEyes && hasMouth;
+    return regex_match(value, SmileyStyle);
 }
 
-int countSmileys(std::vector<std::string> target)
+int countSmileys(const vector<string>& target)
 {
     auto result = 0;
     for(const auto& element : target)
