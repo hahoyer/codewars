@@ -7,5 +7,6 @@
     <ClCompile Include="GetAverageTest.cpp" />
     <ClCompile Include="NarcissisticTest.cpp" />
     <ClCompile Include="TribonacciTest.cpp" />
+    <ClCompile Include="CountSmileysTest.cpp" />
   </ItemGroup>
 </Project>
