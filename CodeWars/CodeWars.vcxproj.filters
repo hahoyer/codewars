@@ -8,5 +8,13 @@
     <ClCompile Include="NarcissisticTest.cpp" />
     <ClCompile Include="TribonacciTest.cpp" />
     <ClCompile Include="CountSmileysTest.cpp" />
+    <ClCompile Include="DigitalRoot.cpp" />
+    <ClCompile Include="PrimeDecomp.cpp" />
+    <ClCompile Include="DirReduction.cpp" />
+    <ClCompile Include="productFib.cpp" />
+    <ClCompile Include="BigNumberAdd.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="properties.h" />
   </ItemGroup>
 </Project>
