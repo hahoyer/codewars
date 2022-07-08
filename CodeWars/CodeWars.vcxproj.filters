@@ -13,6 +13,7 @@
     <ClCompile Include="DirReduction.cpp" />
     <ClCompile Include="productFib.cpp" />
     <ClCompile Include="BigNumberAdd.cpp" />
+    <ClCompile Include="hamber.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="properties.h" />
