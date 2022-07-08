@@ -6,25 +6,13 @@
 
 using namespace igloo;
 
-#include <windows.h>
-
 
 namespace HummingNumber
 {
 #include <cstdint>
 #include <vector>
-  using namespace std;
 
-  static void OutputDebug(const string& text)
-  {
-    if(IsDebuggerPresent())
-      OutputDebugStringA(text.c_str());
-    else
-      printf("%s", text.c_str());
-  }
-
-
-  vector<uint64_t> cache = {1};
+  std::vector<uint64_t> cache = {1};
 
   bool IsHammingNumber(uint64_t target)
   {
@@ -66,7 +54,7 @@ namespace HummingNumber
       return one.value < other.value;
     }
 
-    Triple Times(u_int divider) const
+    Triple Times(int divider) const
     {
       auto result = *this;
       if(divider == 2)
@@ -75,7 +63,7 @@ namespace HummingNumber
         result.exponent3++;
       else if(divider == 5)
         result.exponent5++;
-      else throw exception();
+      else throw std::exception();
       result.value *= divider;
       // overflow check
       if(result.value / divider != value)
@@ -85,7 +73,7 @@ namespace HummingNumber
     }
   };
 
-  void push_back(vector<Triple>& results, Triple const& node)
+  void push_back(std::vector<Triple>& results, Triple const& node)
   {
     if(node.value == 0)
       return;
@@ -98,13 +86,13 @@ namespace HummingNumber
   uint64_t hamber1(int n)
   {
     uint64_t result = 1;
-    vector<Triple> results = {Triple()};
+    std::vector<Triple> results = {Triple()};
 
     for(auto index = 1; index < n; index++)
     {
       auto node = results.front();
       if(node.value > result)
-        throw exception();
+        throw std::exception();
       while(!results.empty() && results.front().value == result)
         results.erase(results.begin());
 
@@ -123,23 +111,23 @@ namespace HummingNumber
 
   uint64_t hamber(int n)
   {
-    std::vector<uint64_t> h = {1};
-    uint64_t x2 = 2, x3 = 3, x5 = 5;
-    size_t i = 0, j = 0, k = 0;
+    std::vector<uint64_t> results = {1};
+    uint64_t nextResult2 = 2, nextResult3 = 3, nextResult5 = 5;
+    size_t lastIndex2 = 0, lastIndex3 = 0, lastIndex5 = 0;
 
-    while(h.size() < n)
+    while(results.size() < n)
     {
-      h.push_back(min(x2, min(x3, x5)));
+      results.push_back(std::min({nextResult2, nextResult3, nextResult5}));
 
-      if(x2 == h.back())
-        x2 = 2 * h[++i];
-      if(x3 == h.back())
-        x3 = 3 * h[++j];
-      if(x5 == h.back())
-        x5 = 5 * h[++k];
+      if(nextResult2 == results.back())
+        nextResult2 = 2 * results[++lastIndex2];
+      if(nextResult3 == results.back())
+        nextResult3 = 3 * results[++lastIndex3];
+      if(nextResult5 == results.back())
+        nextResult5 = 5 * results[++lastIndex5];
     }
 
-    return h[n - 1];
+    return results[n - 1];
   }
 
   Describe(Sample_Test)

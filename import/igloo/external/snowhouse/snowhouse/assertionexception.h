@@ -1,5 +1,5 @@
 
-//          Copyright Joakim Karlsson & Kim Gräsman 2010-2013.
+//          Copyright Joakim Karlsson & Kim Gräsman 2010-2012.
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
@@ -19,9 +19,19 @@ namespace snowhouse {
         : m_message(message), m_fileName(fileName), m_line(line)
       {}
 
+#if __cplusplus > 199711L
+      AssertionException(const AssertionException&) = default;
+#endif
+
+#if __cplusplus > 199711L
+      virtual ~AssertionException() noexcept
+      {
+      }
+#else
       virtual ~AssertionException() throw()
       {
       }
+#endif
 
       std::string GetMessage() const
       {
