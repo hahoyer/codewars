@@ -14,6 +14,8 @@
     <ClCompile Include="productFib.cpp" />
     <ClCompile Include="BigNumberAdd.cpp" />
     <ClCompile Include="hamber.cpp" />
+    <ClCompile Include="determinant.cpp" />
+    <ClCompile Include="Mix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="properties.h" />
