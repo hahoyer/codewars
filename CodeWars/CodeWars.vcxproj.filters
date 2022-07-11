@@ -16,6 +16,7 @@
     <ClCompile Include="hamber.cpp" />
     <ClCompile Include="determinant.cpp" />
     <ClCompile Include="Mix.cpp" />
+    <ClCompile Include="GapInPrimes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="properties.h" />

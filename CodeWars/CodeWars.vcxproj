@@ -159,6 +159,7 @@
     <ClCompile Include="TribonacciTest.cpp" />
     <ClCompile Include="DigitalRoot.cpp" />
     <ClCompile Include="PrimeDecomp.cpp" />
+    <ClCompile Include="GapInPrimes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="properties.h" />
