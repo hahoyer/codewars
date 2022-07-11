@@ -146,6 +146,8 @@
   <ItemGroup>
     <ClCompile Include="CountSmileysTest.cpp" />
     <ClCompile Include="BigNumberAdd.cpp" />
+    <ClCompile Include="CentralPixels.cpp" />
+    <ClCompile Include="RailFenceCipher.cpp" />
     <ClCompile Include="Mix.cpp" />
     <ClCompile Include="determinant.cpp" />
     <ClCompile Include="hamber.cpp" />
