@@ -147,6 +147,7 @@
     <ClCompile Include="CountSmileysTest.cpp" />
     <ClCompile Include="BigNumberAdd.cpp" />
     <ClCompile Include="CentralPixels.cpp" />
+    <ClCompile Include="Debug\TheBooleanOrder.cpp" />
     <ClCompile Include="RailFenceCipher.cpp" />
     <ClCompile Include="Mix.cpp" />
     <ClCompile Include="determinant.cpp" />

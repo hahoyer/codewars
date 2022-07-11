@@ -19,6 +19,7 @@
     <ClCompile Include="GapInPrimes.cpp" />
     <ClCompile Include="RailFenceCipher.cpp" />
     <ClCompile Include="CentralPixels.cpp" />
+    <ClCompile Include="Debug\TheBooleanOrder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="properties.h" />
