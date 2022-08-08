@@ -147,6 +147,9 @@
     <ClCompile Include="CountSmileysTest.cpp" />
     <ClCompile Include="BigNumberAdd.cpp" />
     <ClCompile Include="CentralPixels.cpp" />
+    <ClCompile Include="BurrowsWheelerTransformation.cpp" />
+    <ClCompile Include="Carnaugh.cpp" />
+    <ClCompile Include="Helper.cpp" />
     <ClCompile Include="ShortestKnightMove.cpp" />
     <ClCompile Include="TheBooleanOrder.cpp" />
     <ClCompile Include="RailFenceCipher.cpp" />
@@ -164,8 +167,7 @@
     <ClCompile Include="DigitalRoot.cpp" />
     <ClCompile Include="PrimeDecomp.cpp" />
     <ClCompile Include="GapInPrimes.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="Helper.h" />
     <ClInclude Include="properties.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

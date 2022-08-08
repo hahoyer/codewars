@@ -8,77 +8,173 @@ using namespace igloo;
 namespace CentralPixels
 {
 #include <string>
+  using namespace std;
 
   struct Image
   {
     unsigned* pixels;
     unsigned width, height;
 
-    std::vector<unsigned> central_pixels(unsigned colour) const;
-    // other functions ...
+    Image();
+    Image(std::initializer_list<unsigned> data, unsigned w, unsigned h);
+    ~Image();
+    void resize(unsigned w, unsigned h);
+
+    std::vector<unsigned> central_pixels(unsigned colour) const; // to be written by the codewarrior
   };
+
+  /* ---------------------------------------------------------------------------------- */
+
+  Image::Image()
+    : pixels(nullptr), width(0), height(0)
+  {}
+
+  Image::Image(std::initializer_list<unsigned> data, unsigned w, unsigned h)
+    : width(w), height(h)
+  {
+    pixels = new unsigned[w * h];
+    unsigned* p = pixels;
+    for(auto d : data)
+      *p++ = d;
+  }
+
+  /* ---------------------------------------------------------------------------------- */
+
+  Image::~Image()
+  {
+    delete [] pixels;
+  }
+
+  /* ---------------------------------------------------------------------------------- */
+  // Resize the image. Existing pixel data is not preserved.
+
+  void Image::resize(unsigned w, unsigned h)
+  {
+    width = w;
+    height = h;
+    delete [] pixels;
+    pixels = new unsigned[w * h];
+  }
+
+  /* ---------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------------- */
 
   struct ImagePlus
   {
+  private:
     Image const& Image;
+    unsigned width, height;
+    std::vector<std::vector<unsigned>> distanceCache;
+    mutable std::vector<string> distanceDump;
+    mutable std::vector<string> pixelDump;
+  public:
+    explicit ImagePlus(struct Image const& image);
 
-    unsigned GetDistance(unsigned colour, unsigned x, unsigned y) const;
+    void GetMaximalDistanceForward(unsigned color);
+    unsigned GetMaximalDistanceBackward(unsigned color);
+    vector<unsigned> CollectPixels(unsigned color, unsigned max) const;
 
-    ImagePlus(struct Image const& image)
-      : Image(image)
+  private:
+    unsigned GetDistance(unsigned color, unsigned x, unsigned y) const;
+    unsigned GetPixel(unsigned x, unsigned y) const;
 
-
-    {
-      for(size_t y = 0; y < Image.height; y++)
-        distanceCache.push_back({Image.width});
-    }
-
-    mutable std::vector<std::vector<unsigned>> distanceCache;
+    void OnDistanceChanged() const;
+    void OnImageChanged() const;
   };
 
-
-  std::vector<unsigned> Image::central_pixels(unsigned colour) const
+  std::vector<unsigned> Image::central_pixels(unsigned color) const
   {
-    const ImagePlus imagePlus(*this);
-    auto maximalDistance = 0u;
-    for(auto y = 0u; y < height; y++)
-      for(auto x = 0u; x < width; x++)
-      {
-        if(pixels[x + y * width] == colour)
-        {
-          if(const auto distance = imagePlus.GetDistance(colour, x, y); maximalDistance < distance)
-            maximalDistance = distance;
-        }
-      }
+    auto imagePlus = ImagePlus(*this);
+    imagePlus.GetMaximalDistanceForward(color);
+    const auto maximum = imagePlus.GetMaximalDistanceBackward(color);
+    return imagePlus.CollectPixels(color, maximum);
+  }
 
-    std::vector<unsigned> result;
-    for(auto y = 0u; y < height; y++)
-      for(auto x = 0u; x < width; x++)
-      {
-        if(pixels[x + y * width] == colour)
+  ImagePlus::ImagePlus(struct Image const& image): Image(image), width(image.width), height(image.height)
+  {
+    OnImageChanged();
+    for(size_t y = 0; y < height; y++)
+      distanceCache.emplace_back(width);
+    OnDistanceChanged();
+  }
+
+  void ImagePlus::GetMaximalDistanceForward(unsigned color)
+  {
+    for(auto y = 1u; y < height - 1; y++)
+      for(auto x = 1u; x < width - 1; x++)
+        if(GetPixel(x, y) == color)
         {
-          if(imagePlus.GetDistance(colour, x, y) == maximalDistance)
-            result.push_back(x + y * width);
+          distanceCache[y][x] = min(GetDistance(color, x - 1, y), GetDistance(color, x, y - 1));
+          OnDistanceChanged();
         }
-      }
+  }
+
+  unsigned ImagePlus::GetMaximalDistanceBackward(unsigned color)
+  {
+    unsigned result = 0;
+
+    for(auto y = height - 2; y > 0; y--)
+      for(auto x = width - 2; x > 0; x--)
+        if(GetPixel(x, y) == color)
+        {
+          const auto distance = min(GetDistance(color, x + 1, y), GetDistance(color, x, y + 1));
+          if(distanceCache[y][x] >= distance)
+          {
+            distanceCache[y][x] = distance;
+            OnDistanceChanged();
+            if(result < distance)
+              result = distance;
+          }
+        }
+
     return result;
   }
 
-  unsigned ImagePlus::GetDistance(unsigned colour, unsigned x, unsigned y) const
+  vector<unsigned> ImagePlus::CollectPixels(unsigned color, unsigned max) const
   {
-    if(colour != Image.pixels[x + y * Image.width])
-      return 0;
-    auto& result = distanceCache[x][y];
-    if(result != 0)
-    {
-      if(x == 0 || y == 0 || x == Image.width - 1 || y == Image.height - 1) result = 1;
-      else
-        result = std::min({
-          GetDistance(colour, x - 1, y), GetDistance(colour, x + 1, y), GetDistance(colour, x, y - 1),
-          GetDistance(colour, x, y + 1)
-        }) + 1;
-    }
+    std::vector<unsigned> result;
+    for(auto y = 0u; y < height; y++)
+      for(auto x = 0u; x < width; x++)
+        if(GetPixel(x, y) == color && distanceCache[y][x] == max)
+          result.push_back(x + y * width);
     return result;
+  }
+
+  unsigned ImagePlus::GetDistance(unsigned color, unsigned x, unsigned y) const
+  {
+    if(color == GetPixel(x, y))
+      return distanceCache[y][x] + 1;
+    return 0;
+  }
+
+  void ImagePlus::OnDistanceChanged() const
+  {
+    distanceDump = {};
+    for(const auto& line : distanceCache)
+    {
+      string dump;
+      for(const auto distance : line)
+        dump += static_cast<char>('0' + distance);
+      distanceDump.push_back(dump);
+    }
+  }
+
+  void ImagePlus::OnImageChanged() const
+  {
+    pixelDump = {};
+    for(auto y = 0u; y < height; y++)
+    {
+      string dump;
+      for(auto x = 0u; x < width; x++)
+        dump += static_cast<char>('0' + GetPixel(x, y));
+      pixelDump.push_back(dump);
+    }
+  }
+
+  unsigned ImagePlus::GetPixel(unsigned x, unsigned y) const
+  {
+    return Image.pixels[x + y * width];
   }
 
   using namespace std;
@@ -86,7 +182,42 @@ namespace CentralPixels
   /* ---------------------------------------------------------------------------------- */
   /*                               TESTS                                                */
   /* ---------------------------------------------------------------------------------- */
-#if 0
+  /** Snowhouse Assert setup for checking solutions.
+  Solutions are vectors (of unsigned int), but the order of elements within them isn't important. */
+
+  struct Unordered_Match
+  {
+    Unordered_Match(const std::vector<unsigned>& expected);
+    bool Matches(const std::vector<unsigned>& actual) const;
+
+    std::vector<unsigned> expected_;
+  };
+
+  Unordered_Match::Unordered_Match(const std::vector<unsigned>& expected)
+    : expected_(expected)
+  {
+    sort(expected_.begin(), expected_.end());
+  }
+
+  bool Unordered_Match::Matches(const std::vector<unsigned>& actual) const
+  {
+    if(actual.size() != expected_.size())
+      return false;
+
+    std::vector<unsigned> a = actual;
+    sort(a.begin(), a.end());
+
+    unsigned i;
+    for(i = 0; i != a.size() && a[i] == expected_[i]; i++);
+    return i == a.size();
+  }
+
+  std::ostream& operator<<(std::ostream& stm, const Unordered_Match& crit)
+  {
+    stm << Stringizer<std::vector<unsigned>>::ToString(crit.expected_);
+    return stm;
+  }
+
   Describe(Centre_of_attention)
   {
     It(Example_In_The_Picture)
@@ -116,7 +247,7 @@ namespace CentralPixels
       vector<unsigned> purple_ctr = {2, 3, 4, 5};
       Assert::That(image.central_pixels(4), Fulfills(Unordered_Match(purple_ctr)));
 
-      // There are no pixels with colour 5:
+      // There are no pixels with color 5:
       vector<unsigned> non_existent_ctr = {};
       Assert::That(image.central_pixels(5), Fulfills(Unordered_Match(non_existent_ctr)));
 
@@ -126,5 +257,4 @@ namespace CentralPixels
       Assert::That(image.central_pixels(1), Fulfills(Unordered_Match(new_ctr)));
     }
   };
-#endif
 }

@@ -21,8 +21,12 @@
     <ClCompile Include="CentralPixels.cpp" />
     <ClCompile Include="TheBooleanOrder.cpp" />
     <ClCompile Include="ShortestKnightMove.cpp" />
+    <ClCompile Include="BurrowsWheelerTransformation.cpp" />
+    <ClCompile Include="Helper.cpp" />
+    <ClCompile Include="Carnaugh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="properties.h" />
+    <ClInclude Include="Helper.h" />
   </ItemGroup>
 </Project>
