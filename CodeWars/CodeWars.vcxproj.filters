@@ -24,6 +24,7 @@
     <ClCompile Include="BurrowsWheelerTransformation.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="Carnaugh.cpp" />
+    <ClCompile Include="SimplerInteractiveInterpreter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="properties.h" />

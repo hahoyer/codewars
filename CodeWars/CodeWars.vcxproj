@@ -151,6 +151,7 @@
     <ClCompile Include="Carnaugh.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="ShortestKnightMove.cpp" />
+    <ClCompile Include="SimplerInteractiveInterpreter.cpp" />
     <ClCompile Include="TheBooleanOrder.cpp" />
     <ClCompile Include="RailFenceCipher.cpp" />
     <ClCompile Include="Mix.cpp" />

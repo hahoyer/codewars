@@ -33,9 +33,9 @@ namespace CentralPixels
     : width(w), height(h)
   {
     pixels = new unsigned[w * h];
-    unsigned* p = pixels;
+    unsigned* get = pixels;
     for(auto d : data)
-      *p++ = d;
+      *get++ = d;
   }
 
   /* ---------------------------------------------------------------------------------- */
